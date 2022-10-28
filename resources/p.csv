@@ -7,5 +7,5 @@ p, admin, /depts/:id, PUT
 p, admin, /depts/:id, DELETE
 
 g, admin, member
-g, shenyi, admin
+g, hedui, admin
 g, lisi, member
