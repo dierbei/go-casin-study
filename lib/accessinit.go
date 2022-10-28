@@ -29,9 +29,29 @@ func init() {
 
 //从我们的库里初始化 策略数据
 func initPolicy() {
-	// add p
-	E.AddPolicy("member", "/depts", "GET")
-	E.AddPolicy("admin", "/depts", "POST")
-	// add g
-	E.AddRoleForUser("zhangsan", "member")
+	m := make([]*RoleRel, 0)
+	GetRoles(0, &m, "") //获取角色 对应
+	for _, r := range m {
+		_, err := E.AddRoleForUser(r.PRole, r.Role)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	/////// 初始化用户角色
+	userRoles := GetUserRoles()
+	for _, ur := range userRoles {
+		_, err := E.AddRoleForUser(ur.UserName, ur.RoleName)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	///// 初始化 路由角色
+	routerRoles := GetRouterRoles()
+	for _, rr := range routerRoles {
+		_, err := E.AddPolicy(rr.RoleName, rr.RouterUri, rr.RouterMethod)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
